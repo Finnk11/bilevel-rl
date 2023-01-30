@@ -14,6 +14,7 @@ from utils.configuration import generate_agent, generate_env_from_config, parse_
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
     sys.path.append(tools)
+
 else:
     sys.exit("Please declare the environment variable 'SUMO_HOME'")
 
@@ -51,8 +52,9 @@ def main(args):
 
 
 if __name__ == '__main__':
+    print(os.path.join(os.getcwd(),'configs/DQN.ini'))
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config-path', type=str, required=True, help="experiment config path")
+    parser.add_argument('--config-path', type=str,default=os.path.join(os.getcwd(),'configs/DQN.ini'), help="experiment config path")
     parser.add_argument('--queue', type=str, required=False, help="initial weight for queue")
     parser.add_argument('--brake', type=str, required=False, help="initial weight for brake")
     arguments = parser.parse_args()

@@ -66,6 +66,7 @@ def generate_env_from_config(config, reward_config):
                            observation_c=config.getint('observation_c'),
                            observation_fn=config.get('observation_fn'),
                            num_seconds=config.getint('num_seconds'),
+                           record_trip_info=config.get('record_trip_info'),
                            reward_config=reward_config,
                            norm_config=config)
 
