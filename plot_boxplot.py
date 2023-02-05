@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 
 # To read data from file:
-boxplot_data = json.load(open("data/json/boxplot_queue_length.json"))
+boxplot_data = json.load(open("data/json/boxplot_delay.json"))
 
 print(boxplot_data.keys())
 print(len(boxplot_data['0']))
@@ -20,6 +20,8 @@ ax.set_xlabel('Lane Index')
 ax.set_ylabel('Number of waiting vehicles')
 # ax.set_suptitle('Title')
 plt.suptitle('Number of vehicles waiting at each lane with\n '
-             'dynamic arrivals with peak 0.2 (queue_length agent).')
+             'dynamic arrivals with ns-peak=0.4 and we-peak=0.2\n'
+             '(delay agent).')
 # show plot)
+fig.tight_layout()
 plt.show()

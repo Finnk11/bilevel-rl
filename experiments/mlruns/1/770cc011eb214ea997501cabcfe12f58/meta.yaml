@@ -1,0 +1,15 @@
+artifact_uri: file:///home/jbauer/PycharmProjects/bilevel-rl/experiments/mlruns/1/770cc011eb214ea997501cabcfe12f58/artifacts
+end_time: 1675440096325
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 770cc011eb214ea997501cabcfe12f58
+run_uuid: 770cc011eb214ea997501cabcfe12f58
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1675439113199
+status: 3
+tags: []
+user_id: jbauer

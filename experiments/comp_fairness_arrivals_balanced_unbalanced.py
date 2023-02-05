@@ -27,7 +27,7 @@ def main(args):
     agent_config, env_config, reward_config, net_arch, train_config, meta_config = parse_config(args)
     env = generate_env_from_config(env_config, reward_config)
     eval_env = Monitor(env)
-    model = DQN.load('./best_models/best_model_static.zip')
+    model = DQN.load('./best_models/best_model_dynamic_delay.zip')
     obs = env.reset()
 
     # file stored as /tmp/tmpxfdfe343id
@@ -74,6 +74,7 @@ def main(args):
 
     delays = [float(a['timeLoss_sec']) for a in trip_info_list]
     print('#delays:',len(delays))
+    print('MAX Delay:',max(delays))
 
     # Jain's fairness index
     # Equals 1 when all vehicles have the same delay
@@ -92,12 +93,13 @@ def main(args):
 
     # print("AVG QUEUE LENGTH:", avg_queue_length)
     print("FAIRNESS INDEX:", fairness_index)
+    print('SUM DELAYS:',sum(delays))
 
 
 if __name__ == '__main__':
     print(os.path.join(os.getcwd(),'configs/DQN.ini'))
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config-path', type=str,default=os.path.join(os.getcwd(),'nets/configs/DQN.ini'), help="experiment config path")
+    parser.add_argument('--config-path', type=str,default=os.path.join(os.getcwd(),'./configs/DQN.ini'), help="experiment config path")
     parser.add_argument('--queue', type=str, required=False, help="initial weight for queue")
     parser.add_argument('--brake', type=str, required=False, help="initial weight for brake")
     arguments = parser.parse_args()

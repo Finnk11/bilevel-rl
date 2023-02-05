@@ -27,7 +27,7 @@ def main(args):
     agent_config, env_config, reward_config, net_arch, train_config, meta_config = parse_config(args)
     env = generate_env_from_config(env_config, reward_config)
     eval_env = Monitor(env)
-    model = DQN.load('./best_models/best_model_dynamic.zip')
+    model = DQN.load('./best_models/best_model_dynamic_delay.zip')
     obs = env.reset()
 
     # file stored as /tmp/tmpxfdfe343id
@@ -36,9 +36,19 @@ def main(args):
     i = 0
     queue_length_lst = []
     lane_index_lst = []
+    vehs_on_lane_dict = {0: [], 1: [], 2: [], 3: []}
     while i < 720:
         for j, laneID in enumerate(env.sumo.trafficlight.getControlledLanes('nt1')):
             queue_length = env.sumo.lane.getLastStepHaltingNumber(laneID)
+            vehs_on_lane = env.sumo.lane.getLastStepVehicleIDs(laneID)
+            # vehs_on_lane_halting = []
+
+            # select only halting vehicles
+            for veh in vehs_on_lane:
+                if env.sumo.vehicle.getSpeed(veh) < 0.1:
+                    if veh not in vehs_on_lane_dict[j]:
+                        vehs_on_lane_dict[j].append(veh)
+
             if queue_length > 0:
                 queue_length_lst.append(queue_length)
                 # record the lane
@@ -80,11 +90,29 @@ def main(args):
         trip_info_list.append(trip_info)
 
     delays = [float(a['timeLoss_sec']) for a in trip_info_list]
-    print('#delays:',len(delays))
+    print('#delays:', len(delays))
 
+    id_delay_dict = {}
+    for t in trip_info_list:
+        id_delay_dict[t['id']] = t['timeLoss_sec']
+
+    lane_delays_dict = {0: [], 1: [], 2: [], 3: []}
+
+    for i in range(4):
+        for k in vehs_on_lane_dict[i]:
+            if k not in list(id_delay_dict.keys()):
+                # vehicles on the way at simulation end not counted
+                continue
+            else:
+                lane_delays_dict[i].append(id_delay_dict[k])
+
+    print('lane_delays_dict[2]:',lane_delays_dict[2][:10])
 
     import json
-    json.dump(delays, open("data/json/delays_queue_length.json", 'w'))
+
+    json.dump(delays, open("data/json/delays_d.json", 'w'))
+
+    json.dump(lane_delays_dict, open("data/json/lane_delays_dict_d.json", 'w'))
 
     # Jain's fairness index
     # Equals 1 when all vehicles have the same delay
@@ -109,14 +137,17 @@ def main(args):
     for laneID, queue_length in zip(lane_index_lst, queue_length_lst):
         lane_id_queue_length_dict[laneID].append(queue_length)
 
+    print('delays length:', len(delays))
+    print('lane_index_list length:',len(lane_index_lst))
     # To save the dictionary into a file:
-    json.dump(lane_id_queue_length_dict, open("data/json/boxplot_queue_length.json", 'w'))
+    json.dump(lane_id_queue_length_dict, open("data/json/boxplot_d.json", 'w'))
     print('Data stored to json file')
 
+
 if __name__ == '__main__':
-    print(os.path.join(os.getcwd(),'configs/DQN.ini'))
+    print(os.path.join(os.getcwd(), 'configs/DQN.ini'))
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config-path', type=str,default=os.path.join(os.getcwd(),'nets/configs/DQN.ini'), help="experiment config path")
+    parser.add_argument('--config-path', type=str, default=os.path.join(os.getcwd(), 'nets/configs/DQN.ini'), help="experiment config path")
     parser.add_argument('--queue', type=str, required=False, help="initial weight for queue")
     parser.add_argument('--brake', type=str, required=False, help="initial weight for brake")
     arguments = parser.parse_args()
