@@ -27,7 +27,7 @@ def main(args):
     agent_config, env_config, reward_config, net_arch, train_config, meta_config = parse_config(args)
     env = generate_env_from_config(env_config, reward_config)
     eval_env = Monitor(env)
-    model = DQN.load('./best_models/best_model_dynamic_delay.zip')
+    model = DQN.load('./best_models/best_model_dynamic.zip')
     obs = env.reset()
 
     # file stored as /tmp/tmpxfdfe343id
@@ -110,9 +110,9 @@ def main(args):
 
     import json
 
-    json.dump(delays, open("data/json/delays_d.json", 'w'))
+    json.dump(delays, open("data/json/delays_ql.json", 'w'))
 
-    json.dump(lane_delays_dict, open("data/json/lane_delays_dict_d.json", 'w'))
+    json.dump(lane_delays_dict, open("data/json/lane_delays_dict_ql.json", 'w'))
 
     # Jain's fairness index
     # Equals 1 when all vehicles have the same delay
@@ -140,7 +140,7 @@ def main(args):
     print('delays length:', len(delays))
     print('lane_index_list length:',len(lane_index_lst))
     # To save the dictionary into a file:
-    json.dump(lane_id_queue_length_dict, open("data/json/boxplot_d.json", 'w'))
+    json.dump(lane_id_queue_length_dict, open("data/json/boxplot_ql.json", 'w'))
     print('Data stored to json file')
 
 

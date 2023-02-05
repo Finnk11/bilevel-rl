@@ -1,16 +1,17 @@
 import json
 import matplotlib.pyplot as plt
 # To read data from file:
-delays_ql = json.load(open("data/json/delays_queue_length.json"))
+delays_ql = json.load(open("data/json/delays_ql.json"))
 
-delays_d = json.load(open("data/json/delays_delay.json"))
+delays_d = json.load(open("data/json/delays_d.json"))
 
 
 boxplot_data_ql = json.load(open("data/json/lane_delays_dict_ql.json"))
 boxplot_data_d = json.load(open("data/json/lane_delays_dict_d.json"))
 
-delays_ql = [float(a) for a in boxplot_data_ql['2']]
-delays_d = [float(a) for a in boxplot_data_d['2']]
+
+#delays_ql = [float(a) for a in boxplot_data_ql['0']]+[float(a) for a in boxplot_data_ql['1']]+[float(a) for a in boxplot_data_ql['2']]+[float(a) for a in boxplot_data_ql['3']]
+#delays_d = [float(a) for a in boxplot_data_d['0']]+[float(a) for a in boxplot_data_d['1']]+[float(a) for a in boxplot_data_d['2']]+[float(a) for a in boxplot_data_d['3']]
 
 
 print('length delays_ql:',len(delays_ql))
@@ -92,7 +93,7 @@ ax.legend(['queue_length', 'delay'], loc='upper right')
 ax.set(xlabel='t(s)', ylabel='P(Delay>t)')
 
 plt.suptitle('Delay tail distribution with dynamic arrival \n'
-             'with ns-peak=0.4 and we-peak=0.2 on lane 2.\n')
+             'with ns-peak=0.4 and we-peak=0.2.')
 
 fig.tight_layout()
 

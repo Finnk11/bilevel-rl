@@ -12,7 +12,7 @@ ax.plot(traffic_type, fairness_index, 'bo')
 ax.plot(traffic_type, fairness_index_delay, 'ro')
 
 ax.set(xlabel='traffic_type', ylabel='fairness')
-ax.legend(['queue_length','delay'], loc='lower left')
+ax.legend(['queue_length', 'delay'], loc='lower left')
 
 # plt.arrow(0,fairness_index[0],1,fairness_index[1]-fairness_index[0], color='blue')
 ax.annotate("", xy=(1, fairness_index[1]), xytext=(0, fairness_index[0]), arrowprops=dict(arrowstyle="->",color='b',linewidth=1.5))
@@ -20,9 +20,9 @@ ax.annotate("", xy=(1, fairness_index_delay[1]), xytext=(0, fairness_index_delay
 
 
 fig.suptitle('Performance comparison between queue-length-based,\n'
-             'and delay-based agent with static arrivals with prob=0.2\n'
-             '(balanced) and dynamic arrivals with ns-peak=0.4 and\n'
-             'we-peak=0.2 (unbalanced).\n')
+             'and delay-based agent with static arrivals with\n'
+             ' prob=0.2 (balanced) and dynamic arrivals with\n'
+             ' ns-peak=0.4 and we-peak=0.2 (unbalanced).')
 
 fig.tight_layout()
 plt.show()
