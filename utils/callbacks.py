@@ -129,7 +129,7 @@ class SUMOEvalCallback(EvalCallback):
                 if self.verbose > 0:
                     print("New best mean reward!")
                 if self.best_model_save_path is not None:
-                    self.model.save(os.path.join(self.best_model_save_path, "best_model_dynamic_delay"))
+                    self.model.save(os.path.join(self.best_model_save_path, "best_model_dynamic_0.9"))
                 self.best_mean_reward = mean_reward
                 # Trigger callback if needed
                 if self.callback is not None:

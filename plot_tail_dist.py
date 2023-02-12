@@ -9,15 +9,13 @@ delays_d = json.load(open("data/json/delays_d.json"))
 boxplot_data_ql = json.load(open("data/json/lane_delays_dict_ql.json"))
 boxplot_data_d = json.load(open("data/json/lane_delays_dict_d.json"))
 
+# delays_ql = [float(a) for a in boxplot_data_ql['0']]+[float(a) for a in boxplot_data_ql['1']]+[float(a) for a in boxplot_data_ql['2']]+[float(a) for a in boxplot_data_ql['3']]
+# delays_d = [float(a) for a in boxplot_data_d['0']]+[float(a) for a in boxplot_data_d['1']]+[float(a) for a in boxplot_data_d['2']]+[float(a) for a in boxplot_data_d['3']]
 
-#delays_ql = [float(a) for a in boxplot_data_ql['0']]+[float(a) for a in boxplot_data_ql['1']]+[float(a) for a in boxplot_data_ql['2']]+[float(a) for a in boxplot_data_ql['3']]
-#delays_d = [float(a) for a in boxplot_data_d['0']]+[float(a) for a in boxplot_data_d['1']]+[float(a) for a in boxplot_data_d['2']]+[float(a) for a in boxplot_data_d['3']]
-
-
-print('length delays_ql:',len(delays_ql))
+print('length delays_ql:', len(delays_ql))
 print(delays_ql[:10])
 
-print('length delays_d:',len(delays_d))
+print('length delays_d:', len(delays_d))
 
 
 print('max ql:', max(delays_ql))
@@ -77,7 +75,7 @@ for t in xTimes_ql:
 
 print(yProbs_ql)
 
-######################################################
+#################################################################
 yProbs_d = []
 for t in xTimes_d:
     gc = greater_cnt_d(t)

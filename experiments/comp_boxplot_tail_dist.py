@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+# import plots1
 
 import mlflow
 import tempfile
@@ -23,11 +24,11 @@ else:
 
 
 def main(args):
-    print('CUR DIR:',os.getcwd())
+    print('CUR DIR:', os.getcwd())
     agent_config, env_config, reward_config, net_arch, train_config, meta_config = parse_config(args)
     env = generate_env_from_config(env_config, reward_config)
     eval_env = Monitor(env)
-    model = DQN.load('./best_models/best_model_dynamic.zip')
+    model = DQN.load('./best_models/best_model_dynamic_delay.zip')
     obs = env.reset()
 
     # file stored as /tmp/tmpxfdfe343id
@@ -37,7 +38,11 @@ def main(args):
     queue_length_lst = []
     lane_index_lst = []
     vehs_on_lane_dict = {0: [], 1: [], 2: [], 3: []}
+    reward_list = []
+    veh_cnt_list = []
     while i < 720:
+        veh_cnt_list.append(env.sumo.vehicle.getIDCount())
+
         for j, laneID in enumerate(env.sumo.trafficlight.getControlledLanes('nt1')):
             queue_length = env.sumo.lane.getLastStepHaltingNumber(laneID)
             vehs_on_lane = env.sumo.lane.getLastStepVehicleIDs(laneID)
@@ -64,6 +69,7 @@ def main(args):
         obs, rewards, dones, info = env.step(action)
         env.render()
         i = i+1
+        reward_list.append(rewards)
 
     # average queue length of waiting vehicles
     # avg_queue_length = float(sum(queue_length_lst)) / len(queue_length_lst)
@@ -89,8 +95,14 @@ def main(args):
                      }
         trip_info_list.append(trip_info)
 
+    # plots1.plot_fairness_over_time(trip_info_list)
+
     delays = [float(a['timeLoss_sec']) for a in trip_info_list]
     print('#delays:', len(delays))
+
+
+
+
 
     id_delay_dict = {}
     for t in trip_info_list:
@@ -106,13 +118,22 @@ def main(args):
             else:
                 lane_delays_dict[i].append(id_delay_dict[k])
 
-    print('lane_delays_dict[2]:',lane_delays_dict[2][:10])
+    print('lane_delays_dict[2]:', lane_delays_dict[2][:10])
 
     import json
 
-    json.dump(delays, open("data/json/delays_ql.json", 'w'))
+    #json.dump(delays, open("data/json/delays_d.json", 'w'))
 
-    json.dump(lane_delays_dict, open("data/json/lane_delays_dict_ql.json", 'w'))
+    #json.dump(lane_delays_dict, open("data/json/lane_delays_dict_d.json", 'w'))
+
+    # store reward list
+    #json.dump(reward_list, open("data/json/reward_list_d.json", 'w'))
+
+    # store trip info list
+    #json.dump(trip_info_list, open("data/json/trip_info_list_d.json", 'w'))
+
+    # store vehicle count list
+    json.dump(veh_cnt_list, open("data/json/veh_cnt_list_d.json", 'w'))
 
     # Jain's fairness index
     # Equals 1 when all vehicles have the same delay
@@ -140,7 +161,7 @@ def main(args):
     print('delays length:', len(delays))
     print('lane_index_list length:',len(lane_index_lst))
     # To save the dictionary into a file:
-    json.dump(lane_id_queue_length_dict, open("data/json/boxplot_ql.json", 'w'))
+    #json.dump(lane_id_queue_length_dict, open("data/json/boxplot_d.json", 'w'))
     print('Data stored to json file')
 
 

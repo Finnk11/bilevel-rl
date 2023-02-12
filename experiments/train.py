@@ -52,9 +52,9 @@ def main(args):
 
 
 if __name__ == '__main__':
-    print(os.path.join(os.getcwd(),'configs/DQN.ini'))
+    print(os.path.join(os.getcwd(), 'configs/DQN.ini'))
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config-path', type=str,default=os.path.join(os.getcwd(),'configs/DQN.ini'), help="experiment config path")
+    parser.add_argument('--config-path', type=str, default=os.path.join(os.getcwd(), 'configs/DQN.ini'), help="experiment config path")
     parser.add_argument('--queue', type=str, required=False, help="initial weight for queue")
     parser.add_argument('--brake', type=str, required=False, help="initial weight for brake")
     arguments = parser.parse_args()
